@@ -34,7 +34,7 @@ export default function RootLayout() {
             <Stack.Screen name="+not-found" />
           </Stack>
         </SafeAreaView>
-        <StatusBar style="auto" />
+        <StatusBar style="light" />
       </ThemeProvider>
     </GluestackUIProvider>
   );
