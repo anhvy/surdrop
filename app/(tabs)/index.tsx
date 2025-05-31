@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { Pressable, Text } from "react-native";
 
 type TItem = {
+  id: string;
   delivery_address: string;
   pickup_address: string;
   sender: string;
@@ -16,7 +17,7 @@ const ItemCell = ({ item }: { item: TItem }) => {
   return (
     <Pressable
       onPress={() => {
-        router.navigate("orders/123");
+        router.navigate(`orders/${item.id}/capture`);
       }}
     >
       <Box className="flex-1 p-4 border border-gray-200 rounded-lg">
@@ -30,6 +31,7 @@ const ItemCell = ({ item }: { item: TItem }) => {
 };
 
 const packages = Array.from({ length: 20 }).map((_, i) => ({
+  id: `0321${i + 1}`,
   sender: `Sender ${i + 1}`,
   receiver: `Receiver ${i + 1}`,
   pickup_address: `81 Phan Xich Long ${i + 1}`,
