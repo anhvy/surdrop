@@ -7,7 +7,10 @@ import {
   Shadow,
   Skia,
 } from "@shopify/react-native-skia";
-import { Dimensions } from "react-native";
+import { useRouter } from "expo-router";
+import { Dimensions, Pressable } from "react-native";
+import { useSharedValue } from "react-native-reanimated";
+
 const { width: screenWidth } = Dimensions.get("window");
 
 const TAB_BAR_HEIGHT = 100;
@@ -31,8 +34,10 @@ const svgDrop = Skia.SVG.MakeFromString(
   `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#fff" viewBox="0 0 256 256"><path d="M224,40V80a8,8,0,0,1-16,0V48H176a8,8,0,0,1,0-16h40A8,8,0,0,1,224,40ZM80,208H48V176a8,8,0,0,0-16,0v40a8,8,0,0,0,8,8H80a8,8,0,0,0,0-16Zm136-40a8,8,0,0,0-8,8v32H176a8,8,0,0,0,0,16h40a8,8,0,0,0,8-8V176A8,8,0,0,0,216,168ZM40,88a8,8,0,0,0,8-8V48H80a8,8,0,0,0,0-16H40a8,8,0,0,0-8,8V80A8,8,0,0,0,40,88ZM80,72h96a8,8,0,0,1,8,8v96a8,8,0,0,1-8,8H80a8,8,0,0,1-8-8V80A8,8,0,0,1,80,72Zm8,96h80V88H88Z"></path></svg>`
 )!;
 
-export const SkiaBottomNav = () => {
+const SkiaBottomNav = () => {
+  const router = useRouter();
   const tabBarWidth = screenWidth;
+  const scale = useSharedValue(1);
 
   const path = Skia.Path.Make();
 
@@ -114,6 +119,7 @@ export const SkiaBottomNav = () => {
           y={centralButtonCY - 32}
           width={32}
           height={32}
+          transform={[{ scale: scale.value }]}
         />
 
         <ImageSVG
@@ -124,6 +130,32 @@ export const SkiaBottomNav = () => {
           height={24}
         />
       </Canvas>
+      <Box className="absolute bottom-0 left-0 right-0 flex flex-row justify-between items-end">
+        <Box className="flex-1 h-[60]">
+          <Pressable
+            onPress={() => {
+              router.push("/(tabs)");
+            }}
+            className="h-full w-full"
+          />
+        </Box>
+        <Box className="w-[80] h-[80] mb-5 rounded-full">
+          <Pressable
+            onPress={() => {
+              router.push("/orders/123/capture");
+            }}
+            className="h-full w-full"
+          />
+        </Box>
+        <Box className="flex-1 h-[60]">
+          <Pressable
+            onPress={() => {
+              router.push("/(tabs)/explore");
+            }}
+            className="h-full w-full"
+          />
+        </Box>
+      </Box>
     </Box>
   );
 };

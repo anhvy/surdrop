@@ -18,7 +18,7 @@ const ItemCell = ({ item }: { item: TItem }) => {
   return (
     <Pressable
       onPress={() => {
-        router.navigate(`orders/${item.id}/capture`);
+        // router.navigate(`orders/${item.id}/capture`);
       }}
     >
       <Box className="flex-1 p-4 rounded-xl bg-white">
