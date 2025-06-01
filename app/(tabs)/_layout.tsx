@@ -1,46 +1,20 @@
-import { Tabs } from "expo-router";
+import { Box } from "@/components/ui";
+import { SkiaBottomNav } from "@/components/ui/bottom-tabs";
+import { TabList, Tabs, TabSlot, TabTrigger } from "expo-router/ui";
 import React from "react";
-import { Platform } from "react-native";
 
-import { HapticTab } from "@/components/HapticTab";
-import TabBarBackground from "@/components/ui/TabBarBackground";
-import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme";
-import { Package, User } from "lucide-react-native";
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+// Defining the layout of the custom tab navigator
+export default function Layout() {
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: "absolute",
-          },
-          default: {},
-        }),
-      }}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: "Order",
-          tabBarIcon: ({ color }) => <Package color={color} size={28} />,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: "Profile",
-          tabBarIcon: ({ color }) => <User color={color} size={28} />,
-        }}
-      />
-    </Tabs>
+    <Box className="flex-1">
+      <Tabs>
+        <TabSlot />
+        <TabList>
+          <TabTrigger name="home" href="/(tabs)" />
+          <TabTrigger name="capture" href="/(tabs)/capture" />
+        </TabList>
+      </Tabs>
+      <SkiaBottomNav />
+    </Box>
   );
 }
