@@ -1,18 +1,21 @@
-import { Box, Button, ButtonText, Text } from "@/components/ui";
-import CurrentLocation from "@/components/ui/CurrentLocation";
+import { Box, Button, ButtonText, Text, VStack } from "@/components/ui";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { Image } from "expo-image";
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
+import { InfoIcon } from "lucide-react-native";
 import { useRef, useState } from "react";
 import { Dimensions, StyleSheet } from "react-native";
+import Metadata from "../../components/Metadata";
 
 export default function OrderPage() {
   const router = useRouter();
-  const { orderId } = useLocalSearchParams();
   const [permission, requestPermission] = useCameraPermissions();
 
   const [imageData, setImageData] = useState<string | null>(null);
   const [isCapturing, setIsCapturing] = useState(false);
+  const [captureTimestamp, setCaptureTimestamp] = useState<Date | undefined>(
+    undefined
+  );
   const cameraRef = useRef<CameraView>(null);
 
   // Get screen width for square camera
@@ -37,6 +40,10 @@ export default function OrderPage() {
     if (cameraRef.current && !isCapturing) {
       try {
         setIsCapturing(true);
+
+        // Create timestamp when picture is captured
+        const timestamp = new Date();
+        setCaptureTimestamp(timestamp);
 
         // Optimize camera settings for faster capture
         const photo = await cameraRef.current.takePictureAsync({
@@ -65,6 +72,7 @@ export default function OrderPage() {
 
   const retakePicture = () => {
     setImageData(null);
+    setCaptureTimestamp(undefined);
   };
 
   return (
@@ -72,7 +80,7 @@ export default function OrderPage() {
       <Stack.Screen options={{ headerShown: false }} />
 
       {imageData ? (
-        <Box className="p-5">
+        <Box className="p-5 pb-2">
           <Image
             source={{ uri: imageData }}
             contentFit="cover"
@@ -84,20 +92,30 @@ export default function OrderPage() {
         // Camera view
         <Box
           style={{ width: screenWidth, height: screenWidth }}
-          className="rounded-md p-5 overflow-hidden"
+          className="rounded-md rounded-b-md p-5 pb-2 overflow-hidden"
         >
           <CameraView
             ref={cameraRef}
             facing="back"
-            style={{ flex: 1, borderRadius: 12, overflow: "hidden" }}
+            style={styles.cameraView}
             animateShutter={false}
             ratio="1:1"
           />
         </Box>
       )}
       <Box className="px-5 w-full">
-        <Text className="text-lg font-bold">Metadata</Text>
-        <CurrentLocation />
+        {captureTimestamp ? (
+          <Metadata timestamp={captureTimestamp} />
+        ) : (
+          <Box className="px-8 py-16 bg-white rounded-xl rounded-t-md">
+            <VStack className="items-center justify-center" space="sm">
+              <InfoIcon size={42} color="#d4d4d4" strokeWidth={1.5} />
+              <Text className="text-sm text-gray-500">
+                Capture a picture to see the metadata here
+              </Text>
+            </VStack>
+          </Box>
+        )}
       </Box>
       {!imageData ? (
         <Box className="mt-auto bg-white p-8 z-50 w-full">
@@ -128,5 +146,14 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     width: "100%",
     borderRadius: 12,
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 6,
+  },
+  cameraView: {
+    flex: 1,
+    borderRadius: 12,
+    overflow: "hidden",
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 6,
   },
 });
