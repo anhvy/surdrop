@@ -142,7 +142,7 @@ const SkiaBottomNav = () => {
         <Box className="w-[80] h-[80] mb-5 rounded-full">
           <Pressable
             onPress={() => {
-              router.push("/orders/123/capture");
+              router.push("/capture");
             }}
             className="h-full w-full"
           />

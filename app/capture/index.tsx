@@ -1,4 +1,5 @@
 import { Box, Button, ButtonText, Text } from "@/components/ui";
+import CurrentLocation from "@/components/ui/CurrentLocation";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { Image } from "expo-image";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
@@ -95,13 +96,8 @@ export default function OrderPage() {
         </Box>
       )}
       <Box className="px-5 w-full">
-        <Text className="text-lg font-bold">{`Order #${orderId}`}</Text>
-        <Text>From:</Text>
-        <Text>Sender A</Text>
-        <Text>81 Bach Dang, Binh Thanh District, HCMC</Text>
-        <Text>To:</Text>
-        <Text>Receiver B</Text>
-        <Text>18E Cong Hoa, Tan Binh District, HCMC</Text>
+        <Text className="text-lg font-bold">Metadata</Text>
+        <CurrentLocation />
       </Box>
       {!imageData ? (
         <Box className="mt-auto bg-white p-8 z-50 w-full">
